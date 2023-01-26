@@ -22,4 +22,21 @@ defmodule Cards do
   def deal(deck, hand_size) do
     Enum.split(deck, hand_size)
   end
+
+  # Saving our deck on a file by using some erlang code and
+  # using a built-in method.
+  def save(deck, filename) do
+    binary = :erlang.term_to_binary(deck)
+    File.write(filename, binary)
+  end
+
+  #  loading the saved file by using case we actually mean if else but
+  # in elixir using if & else is discouraged
+  def load(filename) do
+    case File.read(filename) do
+      {:ok, binary} -> :erlang.binary_to_term(binary)
+      # _ means there will be a variable
+      {:error, _reason} -> "The file does not exist."
+    end
+  end
 end
